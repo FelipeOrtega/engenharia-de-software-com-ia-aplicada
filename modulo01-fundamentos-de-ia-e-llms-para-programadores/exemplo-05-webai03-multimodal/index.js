@@ -8,9 +8,14 @@ import { FormController } from './controllers/formController.js';
     const aiService = new AIService();
     const translationService = new TranslationService();
     const view = new View();
+    const controller = new FormController(aiService, translationService, view);
     
     // Set current year
     view.setYear();
+
+    // Always register UI listeners first so file selector keeps working
+    // even if requirements checks fail.
+    controller.setupEventListeners();
 
     // Check requirements
     const errors = await aiService.checkRequirements();
@@ -19,22 +24,9 @@ import { FormController } from './controllers/formController.js';
         return;
     }
 
-    // Initialize translation services
-    try {
-        await translationService.initialize();
-    } catch (error) {
-        console.error('Error initializing translation:', error);
-        view.showError([error.message]);
-        return;
-    }
-
     // Get and initialize AI parameters
     const params = await aiService.getParams();
     view.initializeParameters(params);
-
-    // Initialize controller and setup event listeners
-    const controller = new FormController(aiService, translationService, view);
-    controller.setupEventListeners();
 
     console.log('Application initialized successfully');
 })();

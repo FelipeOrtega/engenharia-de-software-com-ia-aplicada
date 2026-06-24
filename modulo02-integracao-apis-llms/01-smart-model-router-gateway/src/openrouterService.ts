@@ -33,7 +33,7 @@ export class OpenRouterService {
             maxTokens: this.config.maxTokens,
             provider: this.config.provider as ChatGenerationParams['provider']
         })
-
+        console.log('OpenRouterService.generate response:', response)
         const content = String(response.choices.at(0)?.message.content) ?? ''
         return {
             model: response.model,

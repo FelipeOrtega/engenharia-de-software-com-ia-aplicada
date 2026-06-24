@@ -199,14 +199,16 @@ async function checkRequirements() {
         return;
     }
 
-    const params = await LanguageModel.params();
+    const defaultParams = { defaultTemperature: 1, defaultTopK: 3, maxTemperature: 2, maxTopK: 128 };
+    let params = defaultParams;
+    try {
+        if (typeof LanguageModel.params === 'function') {
+            params = await LanguageModel.params();
+        }
+    } catch (e) {
+        console.warn('LanguageModel.params() not available, using defaults:', e);
+    }
     console.log('Language Model Params:', params);
-    /*
-    defaultTemperature: 1
-    defaultTopK:3
-    maxTemperature:2
-    maxTopK:128
-    */
 
     elements.topK.max = params.maxTopK;
     elements.topK.min = 1;
