@@ -1,9 +1,13 @@
-import { describe, it } from 'node:test';
+import { describe, it, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
 import { createServer } from '../src/server.ts';
-import { professionals } from '../src/services/appointmentService.ts';
+import { professionals, resetAppointments } from '../src/services/appointmentService.ts';
 
 const app = createServer();
+
+beforeEach(() => {
+    resetAppointments();
+});
 
 async function makeARequest(question: string) {
     return await app.inject({

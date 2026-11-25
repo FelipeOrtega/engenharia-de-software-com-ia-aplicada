@@ -26,7 +26,7 @@ export const professionals = [
 ];
 
 
-const appointments = [
+const initialAppointments = () => [
     {
         date: todayAtElevenAM.toISOString(),
         patientName: 'Joao da Silva',
@@ -40,6 +40,13 @@ const appointments = [
         professionalId: professionals[1].id
     },
 ]
+
+let appointments = initialAppointments()
+
+// Restores the seed data so tests stay idempotent across --watch reruns (shared module state).
+export function resetAppointments() {
+    appointments = initialAppointments()
+}
 
 
 export class AppointmentService {
